@@ -102,7 +102,7 @@ b3 = tf.Variable(tf.random_normal(shape=(n_classes,)), dtype=tf.float32)
 batch_size = 30 # Training batch size
 Xtrain, Ytrain, Xtest, Ytest = input_data() # Get the data samples
 init = tf.global_variables_initializer()
-
+saver = tf.train.Saver() 
 with tf.Session() as sess:
     sess.run(init) # variables initialization
     total_loss = loss(X, Y)
@@ -127,3 +127,5 @@ with tf.Session() as sess:
             train_acc = evaluate(sess, Xtrain, Ytrain)
             test_acc = evaluate(sess, Xtest, Ytest)
             print('epoch: {:4d} loss: {:5f} train_acc: {:5f} test_acc: {:5f}'.format(epoch + 1,train_loss, train_acc, test_acc))
+            # save best epoch ckpt
+            save_path = saver.save(sess,"saved_models/model.ckpt")
