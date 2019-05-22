@@ -6,6 +6,6 @@ import os
 
 
 with tf.Session() as sess:
-  new_saver = tf.train.import_meta_graph('model.ckpt.meta')
-  new_saver.restore(sess, tf.train.latest_checkpoint('./'))
-  print(sess.run('W1:0'))
+  new_saver = tf.train.import_meta_graph('saved_models/model.ckpt.meta')
+  new_saver.restore(sess, tf.train.latest_checkpoint('./saved_models'))
+  print(sess.run('w1:0'))
