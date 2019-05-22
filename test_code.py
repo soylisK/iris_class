@@ -6,7 +6,7 @@ import os
 
 
 def input_data():
-    input_file = 'Iris.csv'
+    input_file = 'Iris1.csv'
     IRIS_fname = "data/"+input_file
     iris = pd.read_csv(IRIS_fname)
 
@@ -90,11 +90,11 @@ n_hidden = 32 #Number of Hidden nodes
 X = tf.placeholder(dtype=tf.float32, shape=[None, n_dim])
 Y = tf.placeholder(dtype=tf.int32, shape=(None, ))
 # Weights form a matrix, of a feature column per output class.
-W1 = tf.Variable(tf.random_normal(shape=[n_dim, n_hidden]), dtype=tf.float32)
-b1 = tf.Variable(tf.random_normal(shape=(n_hidden,)), dtype=tf.float32)
-W2 = tf.Variable(tf.random_normal(shape=[n_hidden, n_hidden]), dtype=tf.float32)
-b2 = tf.Variable(tf.random_normal(shape=(n_hidden,)), dtype=tf.float32)
-W3 = tf.Variable(tf.random_normal(shape=[n_hidden, n_classes]), dtype=tf.float32)
+W1 = tf.Variable(tf.random_normal(shape=[n_dim, n_hidden]), dtype=tf.float32,name = 'w1')
+b1 = tf.Variable(tf.random_normal(shape=(n_hidden,)), dtype=tf.float32,name = 'b1')
+W2 = tf.Variable(tf.random_normal(shape=[n_hidden, n_hidden]), dtype=tf.float32,name = 'w2')
+b2 = tf.Variable(tf.random_normal(shape=(n_hidden,)), dtype=tf.float32,name = 'w1')
+W3 = tf.Variable(tf.random_normal(shape=[n_hidden, n_classes]), dtype=tf.float32,name = 'w3')
 b3 = tf.Variable(tf.random_normal(shape=(n_classes,)), dtype=tf.float32)
 
 
@@ -102,9 +102,15 @@ b3 = tf.Variable(tf.random_normal(shape=(n_classes,)), dtype=tf.float32)
 batch_size = 30 # Training batch size
 Xtrain, Ytrain, Xtest, Ytest = input_data() # Get the data samples
 init = tf.global_variables_initializer()
-saver = tf.train.Saver() 
+saver = tf.train.Saver()
 with tf.Session() as sess:
-    sess.run(init) # variables initialization
+    # print(sess.run('w1:0'))
+    # sess.run(init) # variables initialization
+    print('after\n')
+
+    new_saver = tf.train.import_meta_graph('saved_models/model.ckpt.meta')
+    new_saver.restore(sess, tf.train.latest_checkpoint('./saved_models'))
+    print(sess.run('w1:0'))
     total_loss = loss(X, Y)
     train_op = train(total_loss)
 
